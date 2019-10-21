@@ -14,18 +14,17 @@ async function run() {
     )
 
   const dirPath = core.getInput("dirPath")
-  core.debug(`dirPath: ${dirPath}`)
+  console.info(`dirPath: ${dirPath}`)
 
-  const filePaths = fs
-    .readdirSync(path.resolve(GITHUB_WORKSPACE, dirPath))
-    .filter(s => s.endsWith(".md"))
-  core.debug(`filePaths: ${JSON.stringify(filePaths, null, 2)}`)
+  const fullPath = path.resolve(GITHUB_WORKSPACE, dirPath)
+  const fileNames = fs.readdirSync(fullPath).filter(s => s.endsWith(".md"))
+  console.info(`fileNames: ${JSON.stringify(fileNames, null, 2)}`)
 
   const rows = await Promise.all(
-    filePaths.map(async filePath => {
-      const md = await readFilePromise(filePath)
+    fileNames.map(async fileName => {
+      const md = await readFilePromise(path.resolve(fullPath, fileName))
       const title = getTitle(md)
-      return toCsvRow([filePath, title])
+      return toCsvRow([fileName, title])
     }),
   )
 
