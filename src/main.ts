@@ -1,19 +1,18 @@
 import * as core from '@actions/core';
-import {wait} from './wait'
+import path from 'path'
+
+run();
 
 async function run() {
   try {
-    const ms = core.getInput('milliseconds');
-    console.log(`Waiting ${ms} milliseconds ...`)
+    const path = core.getInput('path');
+    console.log(`path: ${path}`)
+    console.log(`dirname: ${__dirname}`)
 
-    core.debug((new Date()).toTimeString())
-    await wait(parseInt(ms, 10));
-    core.debug((new Date()).toTimeString())
+    core.debug(path)
 
-    core.setOutput('time', new Date().toTimeString());
+    core.setOutput('path', path);
   } catch (error) {
     core.setFailed(error.message);
   }
 }
-
-run();
