@@ -17,5 +17,5 @@ jobs:
       - uses: finnp/create-file-action@v1.0.0
         env:
           FILE_NAME: ./sampleFiles/summary.csv
-          FILE_DATA: { create_csv.outputs.csv }
+          FILE_DATA: "{{ create_csv.outputs.csv }}"
       - run: cat ./sampleFiles/summary.csv
