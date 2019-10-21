@@ -13,26 +13,23 @@ async function run() {
     )
   try {
     const dirPath = core.getInput("dirPath")
-    console.log(`dirPath: ${dirPath}`)
-    console.log(`dirname: ${__dirname}`)
+    core.debug(`dirPath: ${dirPath}`)
 
-    core.debug(dirPath)
-    core.debug(__dirname)
+    const filePaths = fs
+      .readdirSync(path.resolve(PWD, dirPath))
+      .filter(s => s.endsWith(".md"))
+    core.debug(`filePaths: ${JSON.stringify(filePaths, null, 2)}`)
 
     const rows = await Promise.all(
-      fs
-        .readdirSync(path.resolve(PWD, dirPath))
-        .filter(s => s.endsWith(".md"))
-        .map(async filePath => {
-          const md = await readFilePromise(filePath)
-          const title = getTitle(md)
-          return toCsvRow([filePath, title])
-        }),
+      filePaths.map(async filePath => {
+        const md = await readFilePromise(filePath)
+        const title = getTitle(md)
+        return toCsvRow([filePath, title])
+      }),
     )
 
     const csv = [toCsvRow(["file", "title"])].concat(rows).join("\n")
 
-    console.log(csv)
     core.debug(csv)
     core.setOutput("csv", csv)
   } catch (error) {
