@@ -1,6 +1,7 @@
 import * as core from "@actions/core"
 import path from "path"
 import fs from "fs"
+import { toCsvRow, getTitle } from "./functions"
 
 const { PWD } = process.env
 
@@ -30,35 +31,10 @@ async function run() {
 
     const csv = [toCsvRow(["file", "title"])].concat(rows).join("\n")
 
-    core.debug(csv)
     core.setOutput("csv", csv)
   } catch (error) {
     core.setFailed(error.message)
   }
-}
-
-function toCsvRow(arr: string[]): string {
-  return arr
-    .map(s => s.replace(/"/g, '""'))
-    .map(s => `"${s}"`)
-    .join(",")
-}
-
-function getTitle(md: string): string {
-  const headers = md.match(/#+ .+/g)
-  if (!headers) return ""
-  const [title] = headers
-    .map((h): [string, number | null] => [h, getHeaderLevel(h)])
-    .reduce(([accH, accL], [h, l]) => {
-      if (!l) return [accH, accL]
-      return accL && accL >= l ? [accH, accL] : [h, l]
-    })
-  return title
-}
-
-function getHeaderLevel(str: string): number | null {
-  const arr = str.match(/#/g)
-  return (arr && arr.length) || null
 }
 
 function readFilePromise(filePath: string): Promise<string> {
