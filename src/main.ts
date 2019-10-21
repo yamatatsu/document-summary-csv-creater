@@ -3,16 +3,16 @@ import path from "path"
 import fs from "fs"
 import { toCsvRow, getTitle } from "./functions"
 
-const { PWD } = process.env
+const { PWD = "dummy" } = process.env
 
 run().catch(err => core.setFailed(err.message))
 
 async function run() {
   core.debug(JSON.stringify(process.env, null, 2))
-  if (!PWD)
-    throw new Error(
-      "No process.env.PWD was found. This action can't run on windows.",
-    )
+  // if (!PWD)
+  //   throw new Error(
+  //     "No process.env.PWD was found. This action can't run on windows.",
+  //   )
 
   const dirPath = core.getInput("dirPath")
   core.debug(`dirPath: ${dirPath}`)
