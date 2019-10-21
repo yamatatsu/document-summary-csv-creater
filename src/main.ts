@@ -5,36 +5,33 @@ import { toCsvRow, getTitle } from "./functions"
 
 const { PWD } = process.env
 
-run()
+run().catch(err => core.setFailed(err.message))
 
 async function run() {
   if (!PWD)
     throw new Error(
       "No process.env.PWD was found. This action can't run on windows.",
     )
-  try {
-    const dirPath = core.getInput("dirPath")
-    core.debug(`dirPath: ${dirPath}`)
 
-    const filePaths = fs
-      .readdirSync(path.resolve(PWD, dirPath))
-      .filter(s => s.endsWith(".md"))
-    core.debug(`filePaths: ${JSON.stringify(filePaths, null, 2)}`)
+  const dirPath = core.getInput("dirPath")
+  core.debug(`dirPath: ${dirPath}`)
 
-    const rows = await Promise.all(
-      filePaths.map(async filePath => {
-        const md = await readFilePromise(filePath)
-        const title = getTitle(md)
-        return toCsvRow([filePath, title])
-      }),
-    )
+  const filePaths = fs
+    .readdirSync(path.resolve(PWD, dirPath))
+    .filter(s => s.endsWith(".md"))
+  core.debug(`filePaths: ${JSON.stringify(filePaths, null, 2)}`)
 
-    const csv = [toCsvRow(["file", "title"])].concat(rows).join("\n")
+  const rows = await Promise.all(
+    filePaths.map(async filePath => {
+      const md = await readFilePromise(filePath)
+      const title = getTitle(md)
+      return toCsvRow([filePath, title])
+    }),
+  )
 
-    core.setOutput("csv", csv)
-  } catch (error) {
-    core.setFailed(error.message)
-  }
+  const csv = [toCsvRow(["file", "title"])].concat(rows).join("\n")
+
+  core.setOutput("csv", csv)
 }
 
 function readFilePromise(filePath: string): Promise<string> {
