@@ -2,9 +2,12 @@ name: yamatatsu
 description: create documents summary list as csv
 author: yamatatsu
 inputs:
-  path:
-    description: list directory path
+  dirPath:
+    description: directory path
     default: ./
+outputs:
+  csv:
+    description: summary list csv
 runs:
   using: "node12"
   main: "lib/main.js"
