@@ -1,7 +1,5 @@
-name: "Test typescript-action"
-on:
-  pull_request:
-  push:
+name: "Test document-summary-list-csv-creater"
+on: [push]
 
 jobs:
   test:
