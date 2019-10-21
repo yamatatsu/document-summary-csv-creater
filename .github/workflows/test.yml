@@ -14,8 +14,10 @@ jobs:
         with:
           dirPath: ./sampleFiles
         id: create_csv
-      - uses: finnp/create-file-action@1.0.0
+      - run: echo '${{ steps.create_csv.outputs.csv }}' > ./sampleFiles/summary.csv
+      - uses: stefanzweifel/git-auto-commit-action@v2.1.0
+        with:
+          commit_message: Apply summary list csv
+          branch: ${{ github.head_ref }}
         env:
-          FILE_NAME: ./sampleFiles/summary.csv
-          FILE_DATA: ${{ steps.create_csv.outputs.csv }}
-      - run: cat ./sampleFiles/summary.csv
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
