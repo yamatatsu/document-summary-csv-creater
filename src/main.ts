@@ -10,6 +10,7 @@ async function run() {
     console.log(`dirname: ${__dirname}`)
 
     core.debug(path)
+    core.debug(__dirname)
 
     core.setOutput('path', path);
   } catch (error) {
