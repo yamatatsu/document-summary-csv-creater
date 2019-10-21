@@ -14,4 +14,4 @@ jobs:
       - run: npm test
       - uses: ./
         with:
-          path: ../
+          dirPath: ./sampleFiles

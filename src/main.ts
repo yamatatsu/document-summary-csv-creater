@@ -2,9 +2,15 @@ import * as core from "@actions/core"
 import path from "path"
 import fs from "fs"
 
+const { PWD } = process.env
+
 run()
 
 async function run() {
+  if (!PWD)
+    throw new Error(
+      "No process.env.PWD was found. This action can't run on windows.",
+    )
   try {
     const dirPath = core.getInput("dirPath")
     console.log(`dirPath: ${dirPath}`)
@@ -15,7 +21,7 @@ async function run() {
 
     const rows = await Promise.all(
       fs
-        .readdirSync(path.resolve(__dirname, dirPath))
+        .readdirSync(path.resolve(PWD, dirPath))
         .filter(s => s.endsWith(".md"))
         .map(async filePath => {
           const md = await readFilePromise(filePath)
