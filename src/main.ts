@@ -8,7 +8,7 @@ const { PWD = "dummy" } = process.env
 run().catch(err => core.setFailed(err.message))
 
 async function run() {
-  core.debug(JSON.stringify(process.env, null, 2))
+  console.log(JSON.stringify(process.env, null, 2))
   // if (!PWD)
   //   throw new Error(
   //     "No process.env.PWD was found. This action can't run on windows.",
