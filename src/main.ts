@@ -3,22 +3,21 @@ import path from "path"
 import fs from "fs"
 import { toCsvRow, getTitle } from "./functions"
 
-const { PWD = "dummy" } = process.env
+const { GITHUB_WORKSPACE } = process.env
 
 run().catch(err => core.setFailed(err.message))
 
 async function run() {
-  console.log(JSON.stringify(process.env, null, 2))
-  // if (!PWD)
-  //   throw new Error(
-  //     "No process.env.PWD was found. This action can't run on windows.",
-  //   )
+  if (!GITHUB_WORKSPACE)
+    throw new Error(
+      "No process.env.PWD was found. This action can't run on windows.",
+    )
 
   const dirPath = core.getInput("dirPath")
   core.debug(`dirPath: ${dirPath}`)
 
   const filePaths = fs
-    .readdirSync(path.resolve(PWD, dirPath))
+    .readdirSync(path.resolve(GITHUB_WORKSPACE, dirPath))
     .filter(s => s.endsWith(".md"))
   core.debug(`filePaths: ${JSON.stringify(filePaths, null, 2)}`)
 
