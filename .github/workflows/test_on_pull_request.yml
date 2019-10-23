@@ -1,5 +1,5 @@
-name: "Test document-summary-list-csv-creater"
-on: [push]
+name: "Test on pull request"
+on: [pull_request]
 
 jobs:
   test:
