@@ -1,4 +1,27 @@
-import { toCsvRow, getTitle } from "../src/functions"
+import { toCsvRow, getTitle, getKeywordValue } from "../src/functions"
+
+test("[getKeywordValue] yaml case", async () => {
+  const md = `
+foo: bar baz
+aaa: bbb`
+  const keyword = "foo"
+  expect(getKeywordValue(md)(keyword)).toBe("bar baz")
+})
+
+test('[getKeywordValue] "：" case', async () => {
+  const md = `
+foo：bar baz
+aaa：bbb`
+  const keyword = "foo"
+  expect(getKeywordValue(md)(keyword)).toBe("bar baz")
+})
+
+test("[getKeywordValue] list case", async () => {
+  const md = `
+- foo\n  - bar`
+  const keyword = "foo"
+  expect(getKeywordValue(md)(keyword)).toBe("bar")
+})
 
 test("[toCsvRow]", async () => {
   const input = ['"foo"', "bar,"]

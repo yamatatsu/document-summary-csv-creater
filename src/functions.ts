@@ -5,6 +5,42 @@ export function toCsvRow(arr: string[]): string {
     .join(",")
 }
 
+/**
+ * get string in markdown by keyword.\
+ * suport syntax that;
+ * ```
+ * - foo
+ *   - bar
+ * ```
+ * or
+ * ```
+ * foo: bar
+ * ```
+ */
+export const getKeywordValue = (md: string) => (keyword: string): string => {
+  return (
+    /**
+     * foo: bar
+     */
+    _getKeywordValue(md, new RegExp(`${keyword}(：|:)\\s*(.*)`), 2) ||
+    /**
+     * - foo
+     *   - bar
+     */
+    _getKeywordValue(md, new RegExp(`- ${keyword}\n\\s*- (.*)`), 1)
+  )
+}
+
+export const _getKeywordValue = (
+  md: string,
+  regex: RegExp,
+  index: number,
+): string => {
+  const value = md.match(regex)
+  if (!value) return ""
+  return value[index]
+}
+
 export function getTitle(md: string): string {
   const headers = md.match(/#+ .+/g)
   if (!headers) return ""

@@ -1,7 +1,7 @@
 import * as core from "@actions/core"
 import path from "path"
-import fs from "fs"
-import { toCsvRow, getTitle } from "./functions"
+import { getfilePaths, readFilePromise } from "./fs"
+import { toCsvRow, getKeywordValue } from "./functions"
 
 const { GITHUB_WORKSPACE } = process.env
 
@@ -14,30 +14,25 @@ async function run() {
     )
 
   const dirPath = core.getInput("dirPath")
-  console.info(`dirPath: ${dirPath}`)
+  const colmunsStr = core.getInput("colmuns")
+  console.info(`dirPath: ${dirPath}, colmuns: ${colmunsStr}`)
 
-  const fullPath = path.resolve(GITHUB_WORKSPACE, dirPath)
-  const fileNames = fs.readdirSync(fullPath).filter(s => s.endsWith(".md"))
-  console.info(`fileNames: ${JSON.stringify(fileNames, null, 2)}`)
+  const colmuns = colmunsStr.split(",").map(s => s.trim())
+  console.info(`colmuns: ${colmuns}`)
 
   const rows = await Promise.all(
-    fileNames.map(async fileName => {
-      const md = await readFilePromise(path.resolve(fullPath, fileName))
-      const title = getTitle(md)
-      return toCsvRow([fileName, title])
-    }),
+    getfilePaths(path.resolve(GITHUB_WORKSPACE, dirPath)).map(
+      async ([fileName, filePath]) => {
+        console.info(`fileName: ${fileName}`)
+
+        const md = await readFilePromise(filePath)
+        const values = colmuns.map(getKeywordValue(md))
+        return toCsvRow([fileName, ...values])
+      },
+    ),
   )
 
-  const csv = [toCsvRow(["file", "title"])].concat(rows).join("\n")
+  const csv = [toCsvRow(["file", ...colmuns])].concat(rows).join("\n")
 
   core.setOutput("csv", csv)
-}
-
-function readFilePromise(filePath: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    fs.readFile(filePath, "UTF-8", (err, data) => {
-      if (err) return reject(err)
-      resolve(data)
-    })
-  })
 }

@@ -5,6 +5,9 @@ inputs:
   dirPath:
     description: directory path
     default: ./
+  colmuns:
+    description: csv colmuns. delimiter as ','
+    default:
 outputs:
   csv:
     description: summary list csv
