@@ -22,23 +22,19 @@ export const getKeywordValue = (md: string) => (keyword: string): string => {
     /**
      * foo: bar
      */
-    _getKeywordValue(md, new RegExp(`${keyword}(：|:)\\s*(.*)`), 2) ||
+    _getKeywordValue(md, new RegExp(`${keyword}[:：][ \t]*(.*)`)) ||
     /**
      * - foo
      *   - bar
      */
-    _getKeywordValue(md, new RegExp(`- ${keyword}\n\\s*- (.*)`), 1)
+    _getKeywordValue(md, new RegExp(`- ${keyword}\n[ \t]*- (.*)`))
   )
 }
 
-export const _getKeywordValue = (
-  md: string,
-  regex: RegExp,
-  index: number,
-): string => {
+export const _getKeywordValue = (md: string, regex: RegExp): string => {
   const value = md.match(regex)
   if (!value) return ""
-  return value[index]
+  return value[1]
 }
 
 export function getTitle(md: string): string {

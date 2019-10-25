@@ -13,4 +13,5 @@ jobs:
       - uses: ./
         with:
           dirPath: ./sampleFiles
+          colmuns: id,owner,expired_on
         id: create_csv

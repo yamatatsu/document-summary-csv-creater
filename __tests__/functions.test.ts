@@ -16,11 +16,26 @@ aaa：bbb`
   expect(getKeywordValue(md)(keyword)).toBe("bar baz")
 })
 
+test('[getKeywordValue] "：" case with empty', async () => {
+  const md = `
+foo：
+aaa：bbb`
+  const keyword = "foo"
+  expect(getKeywordValue(md)(keyword)).toBe("")
+})
+
 test("[getKeywordValue] list case", async () => {
   const md = `
 - foo\n  - bar`
   const keyword = "foo"
   expect(getKeywordValue(md)(keyword)).toBe("bar")
+})
+
+test("[getKeywordValue] nested list case", async () => {
+  const md = `
+- foo\n  - bar\n    - baz`
+  const keyword = "bar"
+  expect(getKeywordValue(md)(keyword)).toBe("baz")
 })
 
 test("[toCsvRow]", async () => {
