@@ -13,6 +13,7 @@ jobs:
       - uses: ./
         with:
           dirPath: ./sampleFiles
+          colmuns: id,owner,expired_on
         id: create_csv
       - run: echo '${{ steps.create_csv.outputs.csv }}' > ./sampleFiles/summary.csv
       - run: git add -N ./sampleFiles/summary.csv
