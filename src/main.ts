@@ -20,19 +20,19 @@ async function run() {
   const colmuns = colmunsStr.split(",").map(s => s.trim())
   console.info(`colmuns: ${colmuns}`)
 
-  const rows = await Promise.all(
-    getfilePaths(path.resolve(GITHUB_WORKSPACE, dirPath)).map(
-      async ([fileName, filePath]) => {
-        console.info(`fileName: ${fileName}`)
+  const promises = getfilePaths(path.resolve(GITHUB_WORKSPACE, dirPath)).map(
+    async ([fileName, filePath]): Promise<string> => {
+      console.info(`fileName: ${fileName}`)
 
-        const md = await readFilePromise(filePath)
-        const values = colmuns.map(getKeywordValue(md))
-        return toCsvRow([fileName, ...values])
-      },
-    ),
+      const md = await readFilePromise(filePath)
+      const values = colmuns.map(getKeywordValue(md))
+      return toCsvRow([fileName, ...values])
+    },
   )
 
-  const csv = [toCsvRow(["file", ...colmuns])].concat(rows).join("\n")
+  const csv = [toCsvRow(["file", ...colmuns])]
+    .concat(await Promise.all(promises))
+    .join("\n")
 
   core.setOutput("csv", csv)
 }
