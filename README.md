@@ -21,9 +21,9 @@ Summary csv.
 ## Example usage
 
 ```yaml
-- uses: yamatatsu/document-summary-csv-creater@1.0.0
+- uses: yamatatsu/document-summary-csv-creater@v1.0.1
   with:
-    dirPath: ./sampleFiles
+    dirPaths: ./sampleFiles
     colmuns: id,owner,expired_on
   id: create_csv
 

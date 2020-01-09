@@ -4,8 +4,7 @@ author: yamatatsu <the.kinnikuman@gmail.com>
 inputs:
   dirPaths:
     description: Directory paths. delimiter as ','.
-    required: false
-    default: ./
+    required: true
   colmuns:
     description: CSV colmuns. delimiter as ','.
     required: false
