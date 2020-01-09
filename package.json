@@ -1,11 +1,11 @@
 {
-  "name": "document-summary-list-csv-creater",
-  "version": "0.0.0",
+  "name": "document-summary-csv-creater",
+  "version": "1.0.0",
   "private": true,
   "description": "Action that create document summary list as csv",
-  "main": "lib/main.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && ncc build lib/index.js",
     "test": "jest"
   },
   "repository": "yamatatsu/document-summary-list-csv-creater",
@@ -22,6 +22,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.13",
     "@types/node": "^12.0.4",
+    "@zeit/ncc": "^0.20.5",
     "jest": "^24.8.0",
     "jest-circus": "^24.7.1",
     "prettier": "^1.18.2",

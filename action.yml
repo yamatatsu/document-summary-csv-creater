@@ -1,16 +1,22 @@
-name: yamatatsu
+name: document-summary-csv-creater
 description: create documents summary list as csv
-author: yamatatsu
+author: yamatatsu <the.kinnikuman@gmail.com>
 inputs:
-  dirPath:
-    description: directory path
+  dirPaths:
+    description: Directory paths. delimiter as ','.
+    required: false
     default: ./
   colmuns:
-    description: csv colmuns. delimiter as ','
+    description: CSV colmuns. delimiter as ','.
+    required: false
     default:
 outputs:
   csv:
-    description: summary list csv
+    description: summary csv
 runs:
   using: "node12"
-  main: "lib/main.js"
+  main: "dist/index.js"
+
+branding:
+  icon: list
+  color: green
