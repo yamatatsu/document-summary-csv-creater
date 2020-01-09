@@ -4,22 +4,12 @@ on: [pull_request, push]
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
     steps:
       - uses: actions/checkout@v1
 
-      - run: npm ci
-      - run: npm run build
-      - run: npm test
-      - uses: ./
-        with:
-          dirPath: ./sampleFiles
-          colmuns: id,owner,expired_on
-        id: create_csv
-      - run: echo '${{ steps.create_csv.outputs.csv }}' > ./sampleFiles/summary.csv
-      - run: git add -N ./sampleFiles/summary.csv
-      - uses: stefanzweifel/git-auto-commit-action@v2.1.0
-        with:
-          commit_message: Apply summary list csv
-          branch: ${{ github.head_ref }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: yarn
+      - run: yarn build
+      - run: yarn test
