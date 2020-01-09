@@ -8,7 +8,7 @@
     "build": "tsc && ncc build lib/index.js",
     "test": "jest"
   },
-  "repository": "yamatatsu/document-summary-list-csv-creater",
+  "repository": "yamatatsu/document-summary-csv-creater",
   "keywords": [
     "actions",
     "node",
