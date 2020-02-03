@@ -135,17 +135,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const path_1 = __importDefault(__webpack_require__(622));
 const fs_1 = __webpack_require__(820);
 const functions_1 = __webpack_require__(102);
 function run(workspace, dirPaths, colmuns, log) {
     return __awaiter(this, void 0, void 0, function* () {
         const promises = dirPaths
-            .map(dirPath => fs_1.getfilePaths(path_1.default.resolve(workspace, dirPath)))
+            .map(dirPath => fs_1.getfilePaths(workspace, dirPath))
             .reduce((acc, arr) => [...acc, ...arr], []) // flatten
             .map(([fileName, filePath]) => __awaiter(this, void 0, void 0, function* () {
             log(`fileName: ${fileName}`);
@@ -502,13 +498,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(__webpack_require__(622));
 const fs_1 = __importDefault(__webpack_require__(747));
-function getfilePaths(dirPath) {
+function getfilePaths(workspace, dirPath) {
     return fs_1.default
-        .readdirSync(dirPath)
+        .readdirSync(path_1.default.resolve(workspace, dirPath))
         .filter(s => s.endsWith(".md"))
         .map((fileName) => [
-        fileName,
-        path_1.default.resolve(dirPath, fileName),
+        path_1.default.join(dirPath, fileName),
+        path_1.default.resolve(workspace, dirPath, fileName),
     ]);
 }
 exports.getfilePaths = getfilePaths;
