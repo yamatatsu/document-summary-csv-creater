@@ -1,4 +1,3 @@
-import path from "path"
 import { getfilePaths, readFilePromise } from "./fs"
 import { toCsvRow, getKeywordValue } from "./functions"
 
@@ -9,7 +8,7 @@ export default async function run(
   log: (str: string) => void,
 ) {
   const promises = dirPaths
-    .map(dirPath => getfilePaths(path.resolve(workspace, dirPath)))
+    .map(dirPath => getfilePaths(workspace, dirPath))
     .reduce((acc, arr) => [...acc, ...arr], []) // flatten
     .map(
       async ([fileName, filePath]): Promise<string> => {

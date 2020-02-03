@@ -1,13 +1,16 @@
 import path from "path"
 import fs from "fs"
 
-export function getfilePaths(dirPath: string): [string, string][] {
+export function getfilePaths(
+  workspace: string,
+  dirPath: string,
+): [string, string][] {
   return fs
-    .readdirSync(dirPath)
+    .readdirSync(path.resolve(workspace, dirPath))
     .filter(s => s.endsWith(".md"))
     .map((fileName): [string, string] => [
-      fileName,
-      path.resolve(dirPath, fileName),
+      path.join(dirPath, fileName),
+      path.resolve(workspace, dirPath, fileName),
     ])
 }
 
