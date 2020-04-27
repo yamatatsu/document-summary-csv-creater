@@ -1,6 +1,6 @@
 {
   "name": "document-summary-csv-creater",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "description": "Action that create document summary list as csv",
   "main": "dist/index.js",
